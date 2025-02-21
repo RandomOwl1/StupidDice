@@ -112,7 +112,7 @@ def second_main():
             print("\n".join(fake_files2.keys()))  # List available files
         elif command.startswith("open "):
             filename = command[5:]
-            if filename in fake_files:
+            if filename in fake_files2:
                 print(f"\n--- {filename} ---\n")
                 
                 # If it's the journal entry, add the glitch effect
@@ -132,7 +132,7 @@ def second_main():
         elif command == "exit":
             print("\n[INFO] Logging out...")
             time.sleep(1)
-            break #dunno what i want here yet
+            break #dunno what i want here yet ' you cant leave filling up the screen"
         else:
             print("[ERROR] Unknown command. Try 'ls' or 'open [filename]'.")
 
