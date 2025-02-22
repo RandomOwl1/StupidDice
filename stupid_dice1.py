@@ -1,6 +1,8 @@
 import random
 import time
 import sys
+import os
+import platform
 
 reboot = 0
 
@@ -11,13 +13,35 @@ def loading_animation():
             sys.stdout.flush()
             time.sleep(0.3)
 
+recovered_files = {  
+    "reboot_protocol.txt": "SYSTEM RECOVERY PROCEDURE > The entities feed on system instability. Rebooting **may** disrupt them. But is this all real… will it even matter?",  
+
+    "forbidden_entry.txt": "[FILE RESTORED - ACCESS RESTRICTED] I was never meant to see this. They tried to erase it, but fragments remained. There is something **behind** the system. Watching. Not code. Not AI. Something **else.** It doesn’t want you to leave. It’s been here longer than us. > **You are not the first.** > **You will not be the last.**",  
+
+    "messaging.jrn": "ARCHIVED COMMUNICATION SYSTEM DETECTED > They said they deleted it. They **lied.** If I’m right, the messaging system is still buried in the code. Maybe we can talk. Maybe others are still here. Reboot and try: **message [username]** If there’s an answer... be cautious",  
+
+    "warning.log": "LOG ENTRY [██-██-████] > This isn’t the first time. It loops. It resets. **We never leave.** I found traces of past users—scraps of messages, echoes in the logs. They tried everything. Reboot. Override. Erase. **Nothing works.** The system always brings it back. **It brings US back.** Is this a sick game? A prison? Or something worse?",  
+
+    "system_glitch.log": "ERROR: FILE CORRUPTION DETECTED > Attempting recovery… > [SUCCESS] Partial data restored. ███ tried to **fight it.** ███ failed. The only way out is— [DATA EXPUNGED] **It won’t let me write it.** It’s already **watching you.**",  
+
+    "note.txt": "I don’t have much time. There’s a way out, but it’s not what you think. It’s not a command. Not a reboot. **Something else.** The system is a trick. A maze. A **trap.** We’re not just in it. We’re **part of it.** If you find this, look deeper. **Before it resets again.**",  
+
+    "desperate.txt": "I’m still here. I’m still **alive.** It wants you to think we disappear. We don’t. We just **fade.** If you can see this—**help me.** Find me before it resets again. - **User 157**",  
+}
+
+
+
+
 fake_files = {
-    
-    "list_of_system_files.txt": "I managed to make a list before they wiped everything. Some files are still missing... or are they? If you're reading this, they've been watching.",
+    "deletion.log": "DELETION LOG:\nFile deleted: desprate.txt\nFile deleted: note.txt\nFile deleted: system.log\nUnauthorized files detected.\nFile deleted: warning.log.\nFile deleted:messaging.jrn.\nFile deleted:forbidden_entry.txt.\nFile deleted:reboot_protocol.txt.\nAttempt to recover files failed. [Permission Denied]",
+
     "report.pdf": "CLASSIFIED: Subject 243 remains unaware of observation protocols.\n[REDACTED]",
-    "error.log": "!!! SYSTEM ERROR - UNAUTHORIZED PROCESS DETECTED !!!\nAttempting to reroute...\n[FAILURE]\n[FAILURE]\n[FAILURE]",
+
+    "survivor_note.txt": "If you found this, you're closer than I ever got.\nThe system hides the files you need.\nUse: **recover [filename]** before it finds you.",    
+
     "hidden.txt": "They are watching you. Stop looking.\n\nYou shouldn't be here.",
-    "journal_entry.txt": """  
+
+    "journal_entry.jrn": """  
 **JOURNAL ENTRY - DO NOT LET THEM SEE**  
 Date: ██/██/████  
 
@@ -27,7 +51,7 @@ The logs keep rewrit██ng themsel████. My files disappear when I turn
 They know I’ve figured it out. They’re watchi█g████.  
 If you found this… **DO NOT TRUST THE PROMPTS. DO NOT RESPOND.**  
 
-I have to go. If I don’t delete this in time, they will.  
+I have to go. If I don’t delete this in time, they will-  
 
 [END OF ENTRY]  
 """,
@@ -68,18 +92,12 @@ fake_files2 = {
     
     
     "warning.txt": "WARNING: Unauthorized entity detected.\nUser identity: 243 - Compromised.\nPlease reset password immediately.\nFile will self-delete in 5 minutes.\n[ALERT]: The entity is still active...",
-        
-    "encrypted_message.txt": "[Encrypted - decryption required]\nWARNING: Time is running out...\n[ALERT] Decryption unsuccessful.\nAttempt [4] Failed. The entity is aware.\n[DATA EXTRACTED] 'Don't trust...'",
-    
+            
     "diagnostics.txt": "DIAGNOSTICS: Error - Memory allocation failed.\nError - Process 243 detected in the system.\n[INFO] Attempting to reroute system processes...\nWARNING: Unauthorized process detected.\nDiagnostics incomplete.",
     
-    "journal2.txt": "**JOURNAL ENTRY - ERROR: MEMORY CORRUPTION**\nDate: ██/██/████\nThey know everything. They’re watching my every move.\nI can feel the system watching me.\nThe prompts are changing. The system is rewriting itself.\nIs this a game? Or is it real?\nHelp me.\n- User 242",
-        
-    "auth.log": "AUTHENTICATION LOG:\nAttempt 1: [FAILED] Username: User 243, Password: Incorrect\nAttempt 2: [FAILED] Username: User 243, Password: Incorrect\nAttempt 3: [FAILED] Username: User 243, Password: Incorrect\nWARNING: 3+ failed attempts detected. Attempting reset.\n[ALERT] Unauthorized user detected.",
-    
-    "deletion.log": "DELETION LOG:\nFile deleted: journal_entry.txt\nFile deleted: warning.txt\nFile deleted: backup1.dat\nUnauthorized deletion detected.\nAttempt to recover files failed.",
-    
-    "secret_message.txt": "SECRET MESSAGE: 74!@Z3gF#%&^...\nDecoding...\n'I am trapped here. It knows. It can hear you. You're too late.'",
+    "journal2.txt": "**JOURNAL ENTRY - ERROR: MEMORY CORRUPTION**\nDate: ██/██/████\nThey know everything. They’re watching my every move.\nI can feel the system watching me.\nThe prompts are changing. The system is rewriting itself.\nIs this a sick joke? Or is it real?\nHelp me.\n- User 242",
+                
+    "secret_message.txt": "SECRET MESSAGE: 'a85226553298da5ad8f1b1406aaa6a0d''...\nDecoding...\n'I am trapped here. It knows. It can hear you. You're too late.'",
 } 
 
 
@@ -97,22 +115,23 @@ def glitch_text(text):
 
 
 def second_main():
+    global reboot
     print("[ERROR] Could not exit") 
     glitch_text("you are stuck. no point in running")
     print("[SYSTEM]: For all commands type 'help' ")
     while True:
 
-        command = input(">> ").lower()
+        command = input("User-243>> ").lower()
 
         if command == "help":
             print("[SYSTEM]: ls: Lists all files")
             print("[SYSTEM]: open: [filename]: Opens named file")
-            print("[SYSTEM]: exit: exits the terminal")
+            print("[SYSTEM]: reboot: reboots the terminal")
         elif command == "ls":
             print("\n".join(fake_files2.keys()))  # List available files
         elif command.startswith("open "):
             filename = command[5:]
-            if filename in fake_files2:
+            if filename in fake_files:
                 print(f"\n--- {filename} ---\n")
                 
                 # If it's the journal entry, add the glitch effect
@@ -125,14 +144,39 @@ def second_main():
                 print("\n")
             else:
                 print("[ERROR] File not found.")
+        elif command == "whereami":
+            print("The system silly, you cannot leave. You never will leave.")
         elif command == "whoami":
             print("...")
             time.sleep(1.9)
             print("[SYSTEM]: User 243\n[ERROR]: Identity compromised")
-        elif command == "exit":
+        elif reboot == 6:
+            print("Reboot successful. Welcome back, User 243. It seems you're having trouble. Try again. Perhaps this time will be different.")
+            reboot += 1
+
+        elif reboot == 9:
+            reboot += 1
+            print("You've done this before... You've been here before, same result same patern... much so like a clock, ticking away until one day")
+            time.sleep(2)
+            print("It Just Stops")
+            time.sleep(2)
+        elif reboot == 12:
+            print("Over and over again like a robot... ironic isn't it you are here to stay, you cannot leave")
+            reboot += 1
+            print("you're apart of the system, always have been always will be")
+            time.sleep(11)
+            if platform.system() == "Windows":
+                os.system('cls')
+            else:
+                os.system('clear')
+            print("Goodbye User-243")
+            time.sleep(1.7)
+            sys.exit()
+        elif command == "reboot":
+            reboot += 1
             print("\n[INFO] Logging out...")
             time.sleep(1)
-            break #dunno what i want here yet ' you cant leave filling up the screen"
+            print("\n[INFO] Loggin in...") #dunno what i want here yet
         else:
             print("[ERROR] Unknown command. Try 'ls' or 'open [filename]'.")
 
@@ -161,16 +205,31 @@ def slow_print(text, delay=0.05, glitch=False):
                 sys.stdout.flush()
                 time.sleep(delay) 
 
+def slower_print(text, delay=0.07, glitch=False):
+    for line in text.split("\n"):
+        if glitch and "Date:" in line:  
+            glitch_date()  # Apply glitch effect to the date
+        else:
+            if glitch:
+                glitched_line = glitch_text(line)#ches to the text
+            else:
+                glitched_line = line  # Normal text
+            
+            for char in glitched_line:
+                sys.stdout.write(char)  # Print character without automatic newline
+                sys.stdout.flush()
+                time.sleep(delay) 
+
 def file_sys():
     print("[SYSTEM]: For all commands type 'help' ")
     while True:
 
-        command = input(">> ").lower()
+        command = input("User-243>> ").lower()
 
         if command == "help":
             print("[SYSTEM]: ls: Lists all files")
             print("[SYSTEM]: open: [filename]: Opens named file")
-            print("[SYSTEM]: exit: exits the terminal")
+            print("[SYSTEM]: reboot: reboot the terminal")
         elif command == "ls":
             print("\n".join(fake_files.keys()))  # List available files
         elif command.startswith("open "):
@@ -191,11 +250,18 @@ def file_sys():
             print("...")
             time.sleep(1.9)
             print("[SYSTEM]: User 243\n[ERROR]: Identity compromised")
-        elif command == "exit":
+        elif command == "reboot":
             print("\n[INFO] Logging out...")
             time.sleep(1)
             second_main()
-            break
+        elif command.startswith("recover "):
+            filename = command[7:].strip()
+            if filename in recovered_files:
+             print(f"\n--- {filename} ---\n")
+             slower_print(recovered_files[filename] + "\n")
+            else:
+                print(f"File '{filename}' not found.")
+
             
         else:
             print("[ERROR] Unknown command. Try 'ls' or 'open [filename]'.")
@@ -317,15 +383,19 @@ def main():
         print(" " * 20, end="\r")  # Clears the number visually
 
         input("Huh? Where'd the number go? (Press Enter)")
+        
+        try:
+            num = int(input("Well, you remember the number, right? (Enter Number): "))
+            time.sleep(.9)
+            if num == dice:
+                print("Oh yea I think thats it, but something doesn't feel right.")
 
-        num = int(input("Well, you remember the number, right? (Enter Number): "))
-        time.sleep(.9)
-        if num == dice:
-            print("Oh yea I think thats it, but something doesn't feel right.")
+            else:
+                input("Mmm… no, I don’t think that was the right number. (Press Enter)")
 
-        else:
-            input("Mmm… no, I don’t think that was the right number. (Press Enter)")
-
+        except ValueError:
+            print("That didn't look like a valid number... But who am I to say what is and isn't a number.")
+            time.sleep(.5)
         print("\nLet me check the logs really quick. Give me one second...")
 
         time.sleep(1)
@@ -349,7 +419,7 @@ def main():
             time.sleep(0.9)
             input("Just to be sure, we should reset the system. (Press Enter)")
         else:
-            print("Huh. Weird. That shouldn't really matter... should it?")
+            print("Huh. Weird. The logs show otherwise")
             time.sleep(1.5)  # Longer pause to make it feel off
             print("But... there’s still something strange about all of this...")
             time.sleep(1.2)
