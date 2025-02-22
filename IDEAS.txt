@@ -32,5 +32,11 @@ The Countdown Ends
 
     The encrypted message reaches zero. The screen fills with distorted images and sounds, and then the game suddenly closes itself. When reopened, the files are completely different
 
+amdin temrnal
+
+runs doom
+
+
+
 
 "You are not alone.. you never will  be"
