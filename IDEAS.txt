@@ -37,6 +37,25 @@ amdin temrnal
 runs doom
 
 
+The user details for "user-243" and "user-157" are very long and could be moved to a separate configuration file or a database for better readability and maintainability.
+
+Suggested change:
+
+- user_list = {
+-     "admin":"Currently selected",
+-     "user-243":"Age of entry: 23 \n Status: Disruptive \n Observation: Must be under immense supervision. Still unaware of being watched. All tests indicate physical and cognitive health, yet their persistence is beyond human limits.\n Notes: Increased resistance to conditioning. Unaffected by prior deterrents. Displays an unusual ability to adapt and decode restricted patterns. Further testing required. Escalation protocol under review.",
+-     "user-157":"Age of entry: 18 \n Status: Contained – Solitary \n Observation: Still in isolation. Their messages cannot get out. Despite prolonged deprivation, their spirit remains intact. \nNotes: Prior punishments ineffective. Increased restrictions applied. Subject shows signs of silent defiance—passive, yet resisting. Neural dampeners recommended. If resistance continues, termination may be considered. Further observation mandatory."
+- }
++ from user_details import user_list
+
+
+
+
+
+
+
+
+
 
 
 "You are not alone.. you never will  be"
